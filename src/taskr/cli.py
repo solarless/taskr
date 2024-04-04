@@ -18,7 +18,11 @@ def cli() -> None:
 
 @cli.command("list")
 def get_tasks() -> None:
-    tasks: dict[str, Task] = requests.post(uri + "/list").json()
+    try:
+        tasks: dict[str, Task] = requests.post(uri + "/list").json()
+    except requests.ConnectionError:
+        click.echo(f"could not connect to taskr daemon", file=sys.stderr)
+        sys.exit(1)
 
     rows = []
     for task in tasks.values():
@@ -36,16 +40,36 @@ def get_tasks() -> None:
 @cli.command("create")
 @click.argument("title")
 def create_task(title: str) -> None:
-    response = requests.post(
-        uri + "/create",
-        json={"title": title},
-        headers={"Content-Type": "application/json"},
-    )
+    try:
+        response = requests.post(
+            uri + "/create",
+            json={"title": title},
+        )
+    except requests.ConnectionError:
+        click.echo(f"could not connect to taskr daemon", file=sys.stderr)
+        sys.exit(1)
+
     if response.status_code != 201:
         click.secho("Error :(", fg="red", bold=True)
         sys.exit(1)
 
-    click.secho("Success :)", fg="green", bold=True)
+    click.echo(response.content)
+
+
+@cli.command("remove")
+@click.argument("id")
+def remove_task(id: str) -> None:
+    try:
+        response = requests.post(uri + f"/remove/{id}")
+    except requests.ConnectionError:
+        click.echo(f"could not connect to taskr daemon", file=sys.stderr)
+        sys.exit(1)
+
+    if response.status_code == 404:
+        click.echo(f"could not find task with ID={id}", file=sys.stderr)
+        sys.exit(1)
+
+    click.echo(f"Deleted: {id}")
 
 
 def main() -> None:

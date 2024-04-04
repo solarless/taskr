@@ -27,9 +27,7 @@ def save_tasks(tasks: dict[str, Task]) -> None:
         json.dump(tasks, file)
 
 
-def create_task(
-    title: str,
-) -> None:
+def create_task(title: str) -> str:
     tasks = get_tasks()
 
     time = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
@@ -42,6 +40,7 @@ def create_task(
     }
 
     save_tasks(tasks)
+    return id
 
 
 class TaskNotFoundException(Exception):
@@ -51,7 +50,7 @@ class TaskNotFoundException(Exception):
 def remove_task(id: str) -> None:
     tasks = get_tasks()
 
-    if tasks.pop(id) is None:
+    if tasks.pop(id, None) is None:
         raise TaskNotFoundException()
 
     save_tasks(tasks)

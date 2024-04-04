@@ -1,6 +1,7 @@
 __pycache__/
-*.egg-info/
 .venv/
+*.egg-info/
 
 taskrd.log
+taskrd.pid
 tasks.json

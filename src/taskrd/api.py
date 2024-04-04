@@ -15,22 +15,22 @@ logging.basicConfig(filename="taskrd.log", filemode="a", level=logging.INFO)
 
 @app.post("/tasks/list")
 def handle_list_tasks() -> str:
-    logging.info(f"requested /tasks/list")
+    logging.info(f"requested: /tasks/list")
     return flask.jsonify(get_tasks())
 
 
 @app.post("/tasks/create")
 def handle_create_task() -> str:
     data = flask.request.get_json()
-    logging.info(f"requested: /tasks/list: payload: {data}")
+    logging.info(f"requested: /tasks/create: payload: {data}")
 
     title = data.get("title")
     if title is None:
         return flask.make_response("", 400)
 
-    create_task(title)
+    id = create_task(title)
 
-    return flask.make_response("", 201)
+    return flask.make_response(id, 201)
 
 
 @app.post("/tasks/remove/<id>")
@@ -39,6 +39,6 @@ def handle_remove_task(id: str) -> str:
     try:
         remove_task(id)
     except TaskNotFoundException:
-        logging.error(f"requested: /tasks/list: task with ID={id} not found")
+        logging.error(f"requested: /tasks/remove/{id}: task with ID={id} not found")
         return flask.make_response("", 404)
     return flask.make_response("", 204)
