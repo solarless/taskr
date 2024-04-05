@@ -6,8 +6,6 @@ import subprocess
 
 import click
 
-from .api import app
-
 
 @click.group()
 def cli() -> None:
@@ -41,6 +39,14 @@ def stop():
 
     os.kill(pid, signal.SIGTERM)
     os.remove("taskrd.pid")
+
+
+@cli.command("status")
+def show_status() -> None:
+    started = os.path.exists("taskrd.pid")
+    status = click.style("started", fg="green", bold=True) if started else click.style("stopped", fg="red", bold=True)
+
+    click.echo(f"status: {status}")
 
 
 def main() -> None:
