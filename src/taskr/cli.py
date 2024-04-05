@@ -34,7 +34,8 @@ def get_tasks() -> None:
             date.strftime("%B %-d"),
         ))
 
-    print(tabulate.tabulate(rows, ("ID", "TITLE", "DONE", "CREATED AT"), tablefmt="plain"))
+    if len(rows) != 0:
+        print(tabulate.tabulate(rows, ("ID", "TITLE", "DONE", "CREATED AT"), tablefmt="plain"))
 
 
 @cli.command("create")
