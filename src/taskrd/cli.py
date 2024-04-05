@@ -16,7 +16,6 @@ def cli() -> None:
 def start():
     process = subprocess.Popen(
         ["gunicorn", "--bind", "localhost:5000", "taskrd.api:app"],
-        start_new_session=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
