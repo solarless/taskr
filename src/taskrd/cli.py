@@ -1,5 +1,7 @@
 import os
+import os.path
 import signal
+import sys
 import subprocess
 
 import click
@@ -20,14 +22,22 @@ def start():
         stderr=subprocess.PIPE,
     )
 
+    if os.path.exists("taskrd.pid"):
+        click.echo("taskr daemon is already started")
+        sys.exit(1)
+
     with open("taskrd.pid", "w") as file:
         file.write(str(process.pid))
 
 
 @cli.command("stop")
 def stop():
-    with open("taskrd.pid") as file:
-        pid = int(file.read())
+    try:
+        with open("taskrd.pid") as file:
+            pid = int(file.read())
+    except FileNotFoundError:
+        click.echo("taskr daemon is not started", file=sys.stderr)
+        sys.exit(1)
 
     os.kill(pid, signal.SIGTERM)
     os.remove("taskrd.pid")
