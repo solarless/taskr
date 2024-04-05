@@ -2,6 +2,7 @@ import logging
 
 import flask
 
+from .storage import complete_task
 from .storage import create_task
 from .storage import get_tasks
 from .storage import remove_task
@@ -33,12 +34,23 @@ def handle_create_task() -> str:
     return flask.make_response(id, 201)
 
 
-@app.post("/tasks/remove/<id>")
+@app.post("/tasks/<id>/remove")
 def handle_remove_task(id: str) -> str:
-    logging.info(f"requested: /tasks/remove/{id}")
+    logging.info(f"requested: /tasks/{id}/remove")
     try:
         remove_task(id)
     except TaskNotFoundException:
-        logging.error(f"requested: /tasks/remove/{id}: task with ID={id} not found")
+        logging.error(f"requested: /tasks/{id}/remove: task with ID={id} not found")
         return flask.make_response("", 404)
     return flask.make_response("", 204)
+
+
+@app.post("/tasks/<id>/complete")
+def handle_complete_task(id: str) -> None:
+    logging.info(f"requested: /tasks/{id}/complete")
+    try:
+        complete_task(id)
+    except TaskNotFoundException:
+        logging.error(f"requested: /tasks/{id}/complete: task with ID={id} not found")
+        return flask.make_response("", 404)
+    return flask.make_response("", 200)

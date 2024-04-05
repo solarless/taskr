@@ -62,7 +62,7 @@ def create_task(title: str) -> None:
 def remove_task(ids: list[str]) -> None:
     for id in ids:
         try:
-            response = requests.post(uri + f"/remove/{id}")
+            response = requests.post(uri + f"/{id}/remove")
         except requests.ConnectionError:
             click.echo(f"could not connect to taskr daemon", file=sys.stderr)
             sys.exit(1)
@@ -72,6 +72,23 @@ def remove_task(ids: list[str]) -> None:
             sys.exit(1)
 
         click.echo(f"Deleted: {id}")
+
+
+@cli.command("complete")
+@click.argument("ids", nargs=-1)
+def complete_task(ids: list[str]) -> None:
+    for id in ids:
+        try:
+            response = requests.post(uri + f"/{id}/complete")
+        except requests.ConnectionError:
+            click.echo(f"could not connect to taskr daemon", file=sys.stderr)
+            sys.exit(1)
+
+        if response.status_code == 404:
+            click.echo(f"could not find task with ID={id}", file=sys.stderr)
+            sys.exit(1)
+
+        click.echo(f"Completed: {id}")
 
 
 def main() -> None:

@@ -51,6 +51,17 @@ def remove_task(id: str) -> None:
     tasks = get_tasks()
 
     if tasks.pop(id, None) is None:
-        raise TaskNotFoundException()
+        raise TaskNotFoundException
+
+    save_tasks(tasks)
+
+
+def complete_task(id: str) -> None:
+    tasks = get_tasks()
+
+    try:
+        tasks[id]["done"] = True
+    except KeyError:
+        raise TaskNotFoundException
 
     save_tasks(tasks)
