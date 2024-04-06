@@ -6,6 +6,7 @@ from .storage import complete_task
 from .storage import create_task
 from .storage import get_tasks
 from .storage import remove_task
+from .storage import Task
 from .storage import TaskNotFoundException
 
 
@@ -17,7 +18,8 @@ logging.basicConfig(filename="taskrd.log", filemode="a", level=logging.INFO)
 @app.post("/tasks/list")
 def handle_list_tasks() -> str:
     logging.info(f"requested: /tasks/list")
-    return flask.jsonify(get_tasks())
+    tasks = filter_removed_tasks(get_tasks())
+    return flask.jsonify(tasks)
 
 
 @app.post("/tasks/create")
@@ -54,3 +56,11 @@ def handle_complete_task(id: str) -> None:
         logging.error(f"requested: /tasks/{id}/complete: task with ID={id} not found")
         return flask.make_response("", 404)
     return flask.make_response("", 200)
+
+
+def filter_removed_tasks(tasks: dict[str, Task]) -> dict[str, Task]:
+    return {
+        id: task
+        for id, task in tasks.items()
+        if task["removed_at"] is None
+    }

@@ -11,8 +11,9 @@ tasks_file = pathlib.Path("tasks.json")
 class Task(typing.TypedDict):
     id: str
     title: str
-    done: bool
+    completed: bool
     created_at: str
+    removed_at: str
 
 
 def get_tasks() -> dict[str, Task]:
@@ -35,8 +36,9 @@ def create_task(title: str) -> str:
     tasks[id] = {
         "id": id,
         "title": title,
-        "done": False,
+        "completed": False,
         "created_at": time,
+        "removed_at": None,
     }
 
     save_tasks(tasks)
@@ -50,7 +52,10 @@ class TaskNotFoundException(Exception):
 def remove_task(id: str) -> None:
     tasks = get_tasks()
 
-    if tasks.pop(id, None) is None:
+    time = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+    try:
+        tasks[id]["removed_at"] = time
+    except KeyError:
         raise TaskNotFoundException
 
     save_tasks(tasks)
@@ -60,7 +65,7 @@ def complete_task(id: str) -> None:
     tasks = get_tasks()
 
     try:
-        tasks[id]["done"] = True
+        tasks[id]["completed"] = True
     except KeyError:
         raise TaskNotFoundException
 

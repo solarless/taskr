@@ -30,12 +30,12 @@ def get_tasks() -> None:
         rows.append((
             task["id"],
             task["title"],
-            "yes" if task["done"] else "no",
+            "yes" if task["completed"] else "no",
             date.strftime("%B %-d"),
         ))
 
     if len(rows) != 0:
-        print(tabulate.tabulate(rows, ("ID", "TITLE", "DONE", "CREATED AT"), tablefmt="plain"))
+        print(tabulate.tabulate(rows, ("ID", "TITLE", "COMPLETED", "CREATED AT"), tablefmt="plain"))
 
 
 @cli.command("create")
@@ -71,7 +71,7 @@ def remove_task(ids: list[str]) -> None:
             click.echo(f"could not find task with ID={id}", file=sys.stderr)
             sys.exit(1)
 
-        click.echo(f"Deleted: {id}")
+        click.echo(f"Removed: {id}")
 
 
 @cli.command("complete")
