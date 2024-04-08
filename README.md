@@ -34,6 +34,7 @@ make debugging process easier.
 
 This is the user interface that you can use to easily send requests to
 engine.
+I made it as a CLI application.
 Of course, you can send raw requests via `curl` or some other stuff, but are
 you kidding me?
 
