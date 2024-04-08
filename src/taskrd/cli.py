@@ -6,6 +6,8 @@ import subprocess
 
 import click
 
+from .storage import tasks_file
+
 
 @click.group()
 def cli() -> None:
@@ -14,15 +16,19 @@ def cli() -> None:
 
 @cli.command("start")
 def start():
+    if os.path.exists("taskrd.pid"):
+        click.echo("taskr daemon is already started")
+        sys.exit(1)
+
     process = subprocess.Popen(
         ["gunicorn", "--bind", "localhost:5000", "taskrd.api:app"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
 
-    if os.path.exists("taskrd.pid"):
-        click.echo("taskr daemon is already started")
-        sys.exit(1)
+    if not tasks_file.exists():
+        tasks_file.touch()
+        tasks_file.write_text("{}")
 
     with open("taskrd.pid", "w") as file:
         file.write(str(process.pid))
