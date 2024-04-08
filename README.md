@@ -8,10 +8,11 @@ in the background!
 
 Imagine a simple task list project, but instead of traditional web
 oriented architecture it relays on a bit lower level.
-It's assumed that you run it only on your machine, like Docker Engine
-(imagine someone could just connect to your local Docker Engine and remove
-some volumes that are used for your application database, haha), as it was
-built with self-hostness (does anyone speaks like this?) in mind.
+It's assumed that you run it only on your fancy MacBook rather than public
+server, like Docker Engine (imagine someone could just connect to your local
+Docker Engine and remove some volumes that are used for your application
+database, haha), as it was built with self-hostness (does anyone speaks like
+this?) in mind.
 But in theory you can run it everywhere and get access to it from everywhere
 as well.
 
