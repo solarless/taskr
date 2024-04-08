@@ -15,8 +15,6 @@ built with self-hostness (does anyone speaks like this?) in mind.
 But in theory you can run it everywhere and get access to it from everywhere
 as well.
 
-It stores all data in simple `tasks.json` file :)
-
 This project is splitted into two parts, the engine and the client.
 
 ### The engine
@@ -26,6 +24,8 @@ Yeah, just a simple CRUD but it is what it is.
 It exposes a simple HTTP API (not even RESTful) in order to be able to send
 requests like creating and removing tasks. Also it has a simple CLI so you
 can run it :)
+
+It stores all data in simple `tasks.json` file :)
 
 It produces logs into `taskrd.log` file on each incoming request, just to
 make debugging process easier.
