@@ -73,19 +73,3 @@ The package provides two executables, `taskrd` (engine) and `taskr` (client)
   - `complete ID...` — marks all tasks with ids `ID` as completed
   - `remove ID...` — removes all tasks with ids `ID`. You may assume that it's
     gonna be completely removed, but (haha!) it just gets soft deleted (SCAM)
-
-## Contributing
-
-I'd be glad to see someone creating an issue and letting me know about some
-problems/possible improvements!
-
-Feel free to create an issue or maybe even a pull request! Let's play with
-this project together!
-
-## Some words
-
-Don't take this project as a real world application, and more importantly, don't
-expect this to be well written because I made it just for educational purposes
-and didn't even think about performance/clean code at all :)
-
-Think that's all, at least for now!
